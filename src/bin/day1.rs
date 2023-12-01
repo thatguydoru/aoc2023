@@ -9,18 +9,18 @@ fn part_one() {
     let mut sum: u32 = 0;
 
     for line in INPUT.lines() {
-        let digits: String = line.chars().filter(|c| c.is_ascii_digit()).collect();
+        let digits: String = line.chars().filter(char::is_ascii_digit).collect();
         let digits = digits.as_bytes();
 
         sum += (digits[0] - 48) as u32 * 10;
         sum += (digits[digits.len() - 1] - 48) as u32;
     }
 
-    println!("[ANSWER]\t{sum}");
+    println!("[PART 1 ANSWER]\t{sum}");
 }
 
 fn part_two() {
-    let mut sum = 0;
+    let mut sum: u32 = 0;
 
     for line in INPUT.lines() {
         let mut digits = Vec::new();
@@ -51,5 +51,5 @@ fn part_two() {
         sum += digits[digits.len() - 1];
     }
 
-    println!("[ANSWER]\t{sum}");
+    println!("[PART 2 ANSWER]\t{sum}");
 }
