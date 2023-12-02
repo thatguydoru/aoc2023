@@ -249,17 +249,17 @@ mod part_two {
                     for cubes in subset {
                         match *cubes {
                             Cubes::Red(count) => {
-                                if min.red < count {
+                                if min.red == 0 || min.red < count {
                                     min.red = count;
                                 }
                             }
                             Cubes::Blue(count) => {
-                                if min.blue < count {
+                                if min.blue == 0 || min.blue < count {
                                     min.blue = count;
                                 }
                             }
                             Cubes::Green(count) => {
-                                if min.green < count {
+                                if min.green == 0 || min.green < count {
                                     min.green = count;
                                 }
                             }
