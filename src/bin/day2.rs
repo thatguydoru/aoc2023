@@ -42,12 +42,12 @@ fn parse_input(input: &str) -> Vec<Game> {
         .lines()
         .map(|lines| {
             let mut split = lines.split(':');
-            let id = split
+            let id: u32 = split
                 .next()
                 .and_then(|game| {
                     game.split_whitespace()
                         .last()
-                        .and_then(|id| id.parse::<u32>().ok())
+                        .and_then(|id| id.parse().ok())
                 })
                 .unwrap();
 
