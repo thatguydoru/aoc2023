@@ -132,7 +132,7 @@ mod part_one {
         bag: &'a Bag,
     ) -> impl Iterator<Item = u32> + 'a {
         games.iter().filter_map(|g| {
-            if part_one::is_game_possible(g, bag) {
+            if is_game_possible(g, bag) {
                 Some(g.id)
             } else {
                 None
