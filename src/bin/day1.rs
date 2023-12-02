@@ -12,8 +12,7 @@ fn part_one() {
         let digits: String = line.chars().filter(char::is_ascii_digit).collect();
         let digits = digits.as_bytes();
 
-        sum += (digits[0] - 48) as u32 * 10;
-        sum += (digits[digits.len() - 1] - 48) as u32;
+        sum += (digits[0] - 48) as u32 * 10 + (digits[digits.len() - 1] - 48) as u32;
     }
 
     println!("[PART 1 ANSWER]\t{sum}");
@@ -47,8 +46,7 @@ fn part_two() {
             }
         }
 
-        sum += digits[0] * 10;
-        sum += digits[digits.len() - 1];
+        sum += digits[0] * 10 + digits[digits.len() - 1];
     }
 
     println!("[PART 2 ANSWER]\t{sum}");
