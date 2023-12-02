@@ -233,19 +233,9 @@ mod part_two {
             let mut sum = 0;
 
             for game in games.get().unwrap() {
-                let mut subset_iter = game.subsets.iter();
                 let mut min = Bag::default();
-                let first_set = subset_iter.next().unwrap();
 
-                for cubes in first_set {
-                    match *cubes {
-                        Cubes::Red(count) => min.red = count,
-                        Cubes::Blue(count) => min.blue = count,
-                        Cubes::Green(count) => min.green = count,
-                    }
-                }
-
-                for subset in subset_iter {
+                for subset in &game.subsets {
                     for cubes in subset {
                         match *cubes {
                             Cubes::Red(count) => {
