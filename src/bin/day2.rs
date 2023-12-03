@@ -121,7 +121,7 @@ mod part_one {
 
     pub fn solution() {
         GAMES.with(|games| {
-            let sum: u32 = part_one::filter_possible_games(games.get().unwrap(), &BAG).sum();
+            let sum: u32 = filter_possible_games(games.get().unwrap(), &BAG).sum();
 
             println!("[PART 1 RESULT] {sum}");
         });
