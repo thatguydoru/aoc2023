@@ -33,20 +33,17 @@ fn main() {
 }
 
 fn part_one_solution(cards: &[Card]) -> u32 {
-    cards
-        .iter()
-        .map(|card| {
-            let winning: HashSet<&str> = card.winning.split_whitespace().collect();
-            let potentials: HashSet<&str> = card.potentials.split_whitespace().collect();
-            let points = winning.intersection(&potentials).count() as u32;
+    cards.iter().fold(0, |accum, card| {
+        let winning: HashSet<&str> = card.winning.split_whitespace().collect();
+        let potentials: HashSet<&str> = card.potentials.split_whitespace().collect();
+        let points = winning.intersection(&potentials).count() as u32;
 
-            if let Some(points) = points.checked_sub(1) {
-                2_u32.pow(points)
-            } else {
-                0
-            }
-        })
-        .sum()
+        accum
+            + points
+                .checked_sub(1)
+                .map(|points| 2_u32.pow(points))
+                .unwrap_or_default()
+    })
 }
 
 fn part_two_solution(cards: &[Card]) -> u32 {
