@@ -17,11 +17,10 @@ fn main() {
     let mut cache: Vec<(char, Vec<u32>)> = Vec::new();
     let line_len = input.lines().next().map(|l| l.len()).unwrap();
 
-    for found in symbol_indexes(input) {
+    for (found, symbol) in symbol_indexes(input) {
         let top = parse_line(&input[found - (line_len + 4)..=found - (line_len + 4) + 6]);
         let mid = parse_line(&input[found - 3..=found + 3]);
         let bot = parse_line(&input[found + (line_len + 4) - 6..=found + (line_len + 4)]);
-        let symbol = input.as_bytes()[found] as char;
 
         cache.push((symbol, top.into_iter().chain(mid).chain(bot).collect()));
     }
@@ -87,10 +86,10 @@ fn parse_line(line: &str) -> Vec<u32> {
     numbers
 }
 
-fn symbol_indexes(s: &str) -> impl Iterator<Item = usize> + '_ {
+fn symbol_indexes(s: &str) -> impl Iterator<Item = (usize, char)> + '_ {
     s.chars().enumerate().filter_map(|(idx, c)| {
         if c != '.' && !c.is_ascii_digit() && !c.is_ascii_whitespace() {
-            Some(idx)
+            Some((idx, c))
         } else {
             None
         }
