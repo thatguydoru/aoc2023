@@ -52,25 +52,23 @@ fn part_one_solution(cards: &[Card]) -> u32 {
 }
 
 fn part_two_solution(cards: &[Card]) -> u32 {
-    let win_list: Box<[u32]> = cards
-        .iter()
-        .map(|card| {
-            let winning: Box<[&str]> = card.winning.split_whitespace().collect();
+    let win_iter = cards.iter().map(|card| {
+        let winning: Box<[&str]> = card.winning.split_whitespace().collect();
 
-            let points = card
-                .potentials
-                .split_whitespace()
-                .map(|num| winning.contains(&num) as u32)
-                .sum::<u32>();
+        let points = card
+            .potentials
+            .split_whitespace()
+            .map(|num| winning.contains(&num) as u32)
+            .sum::<u32>();
 
-            points
-        })
-        .collect();
-    let mut copies: Box<[u32]> = vec![1; win_list.len()].into();
+        points
+    });
+    let mut copies: Box<[u32]> = vec![1; win_iter.len()].into();
 
-    for (idx, card) in win_list.iter().enumerate() {
+    for (idx, card) in win_iter.enumerate() {
         let curr_copy = copies[idx];
-        for copy in copies[idx + 1..idx + 1 + *card as usize].iter_mut() {
+
+        for copy in copies[idx + 1..idx + 1 + card as usize].iter_mut() {
             *copy += curr_copy;
         }
     }
