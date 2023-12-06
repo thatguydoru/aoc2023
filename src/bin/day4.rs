@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 const _TEST_INPUT: &str = "Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
 Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19
 Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1
@@ -34,13 +36,9 @@ fn part_one_solution(cards: &[Card]) -> u32 {
     cards
         .iter()
         .map(|card| {
-            let winning: Box<[&str]> = card.winning.split_whitespace().collect();
-
-            let points = card
-                .potentials
-                .split_whitespace()
-                .map(|num| winning.contains(&num) as u32)
-                .sum::<u32>();
+            let winning: HashSet<&str> = card.winning.split_whitespace().collect();
+            let potentials: HashSet<&str> = card.potentials.split_whitespace().collect();
+            let points = winning.intersection(&potentials).count() as u32;
 
             if let Some(points) = points.checked_sub(1) {
                 2_u32.pow(points)
@@ -53,22 +51,17 @@ fn part_one_solution(cards: &[Card]) -> u32 {
 
 fn part_two_solution(cards: &[Card]) -> u32 {
     let win_iter = cards.iter().map(|card| {
-        let winning: Box<[&str]> = card.winning.split_whitespace().collect();
+        let winning: HashSet<&str> = card.winning.split_whitespace().collect();
+        let potentials: HashSet<&str> = card.potentials.split_whitespace().collect();
 
-        let points = card
-            .potentials
-            .split_whitespace()
-            .map(|num| winning.contains(&num) as u32)
-            .sum::<u32>();
-
-        points
+        winning.intersection(&potentials).count()
     });
     let mut copies: Box<[u32]> = vec![1; win_iter.len()].into();
 
     for (idx, card) in win_iter.enumerate() {
         let curr_copy = copies[idx];
 
-        for copy in copies[idx + 1..idx + 1 + card as usize].iter_mut() {
+        for copy in copies[idx + 1..idx + 1 + card].iter_mut() {
             *copy += curr_copy;
         }
     }
