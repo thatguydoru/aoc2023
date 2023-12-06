@@ -13,7 +13,7 @@ struct Card {
 
 fn main() {
     let input = INPUT;
-    let cards: Vec<Card> = input
+    let cards: Box<[Card]> = input
         .lines()
         .map(|line| {
             let colon = line.find(':').unwrap();
@@ -52,7 +52,7 @@ fn part_one_solution(cards: &[Card]) -> u32 {
 }
 
 fn part_two_solution(cards: &[Card]) -> u32 {
-    let win_list: Vec<u32> = cards
+    let win_list: Box<[u32]> = cards
         .iter()
         .map(|card| {
             let winning: Box<[&str]> = card.winning.split_whitespace().collect();
@@ -66,14 +66,14 @@ fn part_two_solution(cards: &[Card]) -> u32 {
             points
         })
         .collect();
-    let mut copies: Vec<u32> = vec![1; win_list.len()];
+    let mut copies: Box<[u32]> = vec![1; win_list.len()].into();
 
-    for (idx, card) in win_list.into_iter().enumerate() {
+    for (idx, card) in win_list.iter().enumerate() {
         let curr_copy = copies[idx];
-        for copy in copies[idx + 1..idx + 1 + card as usize].iter_mut() {
+        for copy in copies[idx + 1..idx + 1 + *card as usize].iter_mut() {
             *copy += curr_copy;
         }
     }
 
-    copies.into_iter().sum()
+    copies.iter().sum()
 }
