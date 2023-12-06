@@ -56,12 +56,12 @@ fn part_two_solution(cards: &[Card]) -> u32 {
 
         winning.intersection(&potentials).count()
     });
-    let mut copies: Box<[u32]> = vec![1; win_iter.len()].into();
+    let mut copies: Box<[u32]> = vec![1; cards.len()].into();
 
     for (idx, card) in win_iter.enumerate() {
         let curr_copy = copies[idx];
 
-        for copy in copies[idx + 1..idx + 1 + card].iter_mut() {
+        for copy in &mut copies[idx + 1..idx + 1 + card] {
             *copy += curr_copy;
         }
     }
