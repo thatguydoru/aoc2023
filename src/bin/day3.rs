@@ -74,20 +74,23 @@ fn init_cache(input: &str) -> HashMap<char, Vec<Rc<[u32]>>> {
         ];
 
         let symbol = symbol_match.as_str().chars().next().unwrap();
-        let mut neighbors = Vec::new();
+        let neighbors: Rc<[u32]> = surrounding
+            .into_iter()
+            .fold(Vec::new(), |mut accum, line| {
+                accum.extend(number_rgx.find_iter(line).filter_map(|number_match| {
+                    let start = number_match.start();
+                    let end = number_match.end();
 
-        for line in surrounding {
-            for number_match in number_rgx.find_iter(line) {
-                let start = number_match.start();
-                let end = number_match.end();
+                    if (2..=4).contains(&start) || (2..=4).contains(&(end - 1)) {
+                        Some(number_match.as_str().parse::<u32>().unwrap())
+                    } else {
+                        None
+                    }
+                }));
 
-                if (2..=4).contains(&start) || (2..=4).contains(&(end - 1)) {
-                    neighbors.push(number_match.as_str().parse().unwrap());
-                }
-            }
-        }
-
-        let neighbors: Rc<[u32]> = neighbors.into();
+                accum
+            })
+            .into();
 
         cache
             .entry(symbol)
