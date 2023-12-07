@@ -71,9 +71,9 @@ fn init_cache(input: &str) -> Cache {
          * from 1 to 3. This assumption was due to the input's structure.
          * */
         let surrounding = [
-            &input[symbol_idx - (line_len + 4)..=symbol_idx - (line_len + 4) + 6],
+            &input[symbol_idx - (line_len + 4)..=symbol_idx - (line_len - 2)],
             &input[symbol_idx - 3..=symbol_idx + 3],
-            &input[symbol_idx + (line_len + 4) - 6..=symbol_idx + (line_len + 4)],
+            &input[symbol_idx + (line_len - 2)..=symbol_idx + (line_len + 4)],
         ];
         let neighbors: Rc<[u32]> = surrounding
             .into_iter()
