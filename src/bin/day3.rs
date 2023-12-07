@@ -1,6 +1,7 @@
+use std::collections::HashMap;
 use std::str::FromStr;
 
-const TEST_INPUT: &str = "467..114..
+const _TEST_INPUT: &str = "467..114..
 ...*......
 ..35..633.
 ......#...
@@ -14,38 +15,42 @@ const INPUT: &str = include_str!("day3.in");
 
 fn main() {
     let input = INPUT;
-    let mut cache: Vec<(char, Vec<u32>)> = Vec::new();
-    let line_len = input.lines().next().map(|l| l.len()).unwrap();
+    let mut cache: HashMap<char, Vec<Vec<u32>>> = HashMap::new();
+    let line_len = input.lines().count(); // the input should be of size n x n
 
     for (found, symbol) in symbol_indexes(input) {
         let top = parse_line(&input[found - (line_len + 4)..=found - (line_len + 4) + 6]);
         let mid = parse_line(&input[found - 3..=found + 3]);
         let bot = parse_line(&input[found + (line_len + 4) - 6..=found + (line_len + 4)]);
 
-        cache.push((symbol, top.into_iter().chain(mid).chain(bot).collect()));
+        cache
+            .entry(symbol)
+            .and_modify(|v| v.push(top.iter().chain(&mid).chain(&bot).cloned().collect()))
+            .or_insert(vec![top.iter().chain(&mid).chain(&bot).cloned().collect()]);
     }
 
     println!("PART 1 ANSWER: {}", part_one_solution(&cache));
     println!("PART 2 ANSWER: {}", part_two_solution(&cache));
 }
 
-fn part_one_solution(cache: &[(char, Vec<u32>)]) -> u32 {
+fn part_one_solution(cache: &HashMap<char, Vec<Vec<u32>>>) -> u32 {
     let mut sum = 0;
 
-    for (_, part_numbers) in cache {
-        sum += part_numbers.iter().sum::<u32>();
+    for (_, part_numbers) in cache.iter() {
+        sum += part_numbers
+            .iter()
+            .map(|parts| parts.iter().sum::<u32>())
+            .sum::<u32>();
     }
 
     sum
 }
 
-fn part_two_solution(cache: &[(char, Vec<u32>)]) -> u32 {
+fn part_two_solution(cache: &HashMap<char, Vec<Vec<u32>>>) -> u32 {
     let mut sum = 0;
+    let gears = cache.get(&'*').unwrap();
 
-    for (_, part_numbers) in cache
-        .iter()
-        .filter(|(symbol, part_numbers)| *symbol == '*' && part_numbers.len() == 2)
-    {
+    for part_numbers in gears.iter().filter(|part_numbers| part_numbers.len() == 2) {
         let [a, b] = part_numbers[..] else {
             unreachable!();
         };
